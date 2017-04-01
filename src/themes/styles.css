@@ -1,0 +1,64 @@
+.layout-inline {
+  display: inline;
+}
+
+.required-field::after {
+  color: red;
+  content: "*";
+  margin-left: 2px;
+}
+
+.column-filter {
+  width: 1px;
+}
+
+.pad-3 {
+  padding: 5px;
+}
+
+.pad-5 {
+  padding: 5px;
+}
+
+.mbottom-0 {
+  margin-bottom: 0px;
+}
+
+.mbottom-5 {
+  margin-bottom: 5px;
+}
+
+.mright-3 {
+  margin-right: 3px !important;
+}
+
+.mright-5 {
+  margin-right: 5px !important;
+}
+
+.mtop-5 {
+  margin-top: 5px;
+}
+
+.dropdown-menu {
+  text-transform: none;
+  width: 200px;
+}
+
+.fw-normal {
+  font-weight: normal;
+}
+
+.red {
+  color: red;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.div-scroll-200 {
+  height: 200px;
+  overflow: auto;
+  overflow-x: hidden;
+}
