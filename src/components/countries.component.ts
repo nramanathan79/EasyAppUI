@@ -4,4 +4,6 @@ import { Component } from '@angular/core';
   selector: 'countries',
   templateUrl: 'templates/countries.html'
 })
-export class CountriesComponent { }
+export class CountriesComponent {
+  dataTableName: string = "country";
+}
