@@ -61,12 +61,12 @@ export class DataTableConfig extends ElementConfig {
 
 @Injectable()
 export class DataTableService {
-  private configDictionary: DataTableConfig;
+  private configDictionary: { [serviceName: string]: DataTableConfig } = {};
 
-  public getDataTableConfig(dataTableName: string): Promise<DataTableConfig> {
-    if (!this.configDictionary[dataTableName]) {
-      if (dataTableName === 'country') {
-        var countryConfig: DataTableConfig = {
+  public getDataTableConfig(dataTableServiceName: string): Promise<DataTableConfig> {
+    if (!this.configDictionary[dataTableServiceName]) {
+      if (dataTableServiceName === 'countries') {
+        this.configDictionary[dataTableServiceName] = {
           enableSearch: true,
           enableColumnSort: true,
           enableMultiColumnSort: true,
@@ -76,7 +76,7 @@ export class DataTableService {
           enableRefresh: true,
           enableRowNum: true,
           enableDataEdit: true,
-          dataEditEndPoint: "/countries",
+          dataEditEndPoint: "/" + dataTableServiceName,
           styleClasses: "table table-striped table-bordered mtop-5 mbottom-5",
           columns: [
             {
@@ -176,11 +176,9 @@ export class DataTableService {
             }
           ]
         };
-
-        this.configDictionary[dataTableName] = countryConfig;
       }
     }
 
-    return Promise.resolve(this.configDictionary[dataTableName]);
+    return Promise.resolve(this.configDictionary[dataTableServiceName]);
   }
 }

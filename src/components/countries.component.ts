@@ -5,5 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: 'templates/countries.html'
 })
 export class CountriesComponent {
-  dataTableName: string = "country";
+  dataTableServiceName: string = "countries";
 }

@@ -7,14 +7,15 @@ import { DataTableService, DataTableConfig } from '../services/dataTable.service
 })
 export class DataTableComponent implements OnInit {
   @Input()
-  dataTableName: string;
+  dataTableServiceName: string;
 
   dataTableConfig: DataTableConfig;
+  dataTableConfigString: string;
 
   constructor(private dataTableService: DataTableService) { }
 
   getDataTableConfig(): void {
-    this.dataTableService.getDataTableConfig(this.dataTableName).then(dataTableConfig => this.dataTableConfig = dataTableConfig);
+    this.dataTableService.getDataTableConfig(this.dataTableServiceName).then(dataTableConfig => this.dataTableConfig = dataTableConfig).then(dataTableConfig => this.dataTableConfigString = JSON.stringify(dataTableConfig));
   }
 
   ngOnInit(): void {
