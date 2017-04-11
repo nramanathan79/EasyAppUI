@@ -8,8 +8,6 @@ import { MainComponent }      from '../components/main.component';
 import { CountriesComponent } from '../components/countries.component';
 import { DataTableComponent } from '../components/dataTable.component';
 
-import { DataTableService } from '../services/dataTable.service';
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -20,9 +18,6 @@ import { DataTableService } from '../services/dataTable.service';
     MainComponent,
     CountriesComponent,
     DataTableComponent
-  ],
-  providers: [
-    DataTableService
   ],
   bootstrap: [MainComponent]
 })
