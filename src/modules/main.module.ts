@@ -4,9 +4,10 @@ import { FormsModule }   from '@angular/forms';
 
 import { RoutingModule } from './routing.module';
 
-import { MainComponent }      from '../components/main.component';
-import { CountriesComponent } from '../components/countries.component';
-import { DataTableComponent } from '../components/dataTable.component';
+import { MainComponent }         from '../components/main.component';
+import { CountriesComponent }    from '../components/countries.component';
+import { DataTableComponent }    from '../components/dataTable.component';
+import { ColumnFilterComponent } from '../components/columnFilter.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { DataTableComponent } from '../components/dataTable.component';
   declarations: [
     MainComponent,
     CountriesComponent,
-    DataTableComponent
+    DataTableComponent,
+    ColumnFilterComponent
   ],
   bootstrap: [MainComponent]
 })
