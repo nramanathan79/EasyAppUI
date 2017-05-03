@@ -10,7 +10,7 @@
           <button class="btn btn-sm btn-primary" type="submit">
 							<span class="glyphicon glyphicon-search mright-3"></span>Search
 						</button>
-          <button class="btn btn-sm btn-default" type="button" ng-click="clearSearch()">Clear</button>
+          <button class="btn btn-sm btn-default" type="button" (click)="clearSearch()">Clear</button>
         </form>
       </div>
       <div class="col-md-4" *ngIf="dataTableConfig.enableMultiColumnSort">
@@ -23,7 +23,7 @@
         <button class="btn btn-sm btn-default" (click)="clearSort()" *ngIf="sortPresent()">Clear All Sort</button>
       </div>
       <div class="col-md-1" *ngIf="dataTableConfig.enableColumnFilter">
-        <button class="btn btn-sm btn-default" ng-click="clearFilters()" ng-if="hasFilters()">Clear All Filters</button>
+        <button class="btn btn-sm btn-default" (click)="clearFilters()" *ngIf="hasFilters()">Clear All Filters</button>
       </div>
       <div class="col-md-1" *ngIf="dataTableConfig.enableImportCsv">
         <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#importCsv">
@@ -39,7 +39,7 @@
                 <input type="file" name="importCsv" id="importCsvFile" accept=".csv" import-csv />
               </div>
               <div class="modal-footer">
-                <button type="button" class="pull-left btn btn-primary" ng-click="importCsvFile()" ng-disabled="!hasImportCsvFile()">Import
+                <button type="button" class="pull-left btn btn-primary" (click)="importCsvFile()" [disabled]="!hasImportCsvFile()">Import
 									</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
@@ -50,7 +50,7 @@
       <div class="col-md-2 text-right">
         <div class="row" *ngIf="dataTableConfig.enableRefresh">
           <div class="col-md-12">
-            <button class="btn btn-sm btn-primary" ng-disabled="filteredRecords.editing" ng-click="listRecords()">
+            <button class="btn btn-sm btn-primary" [disabled]="editing" (click)="listRecords()">
 								<span class="glyphicon glyphicon-refresh mright-3"></span>Refresh
 							</button>
           </div>
@@ -62,38 +62,27 @@
         <tr [ngClass]="dataTableConfig.headerRow?.styleClasses">
           <th class="text-right" *ngIf="dataTableConfig.enableRowNum">#</th>
           <th *ngFor="let column of dataTableConfig.columns">
-            <span *ngIf="dataTableConfig.enableColumnSort; else headerElseBlock">
+            <span *ngIf="dataTableConfig.enableColumnSort">
               <button class="btn btn-link bold" (click)="addSort(column.dataCell.inputField.name)">{{column.dataCell.inputField.label}}</button>
               <span [ngClass]="{'required-field': column.dataCell.inputField.required}"></span>
             <span class="glyphicon glyphicon-sort-by-attributes" *ngIf="sortBy.indexOf(column.dataCell.inputField.name) >= 0"></span>
             <span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="sortBy.indexOf('-' + column.dataCell.inputField.name) >= 0"></span>
             <sup *ngIf="showSortIndex(column.dataCell.inputField.name) > 0">{{showSortIndex(column.dataCell.inputField.name)}}</sup>
             </span>
-            <ng-template #headerElseBlock>
-              <span [ngClass]="{'required-field': column.dataCell.inputField.required}">{{column.dataCell.inputField.label}}</span>
-            </ng-template>
+            <span *ngIf="!dataTableConfig.enableColumnSort" [ngClass]="{'required-field': column.dataCell.inputField.required}">{{column.dataCell.inputField.label}}</span>
             <column-filter *ngIf="dataTableConfig.enableColumnFilter" [columnDataField]="column.dataCell.inputField"></column-filter>
           </th>
           <th class="text-nowrap" *ngIf="dataTableConfig.enableDataEdit">Action</th>
         </tr>
       </thead>
-      <!--
       <tbody>
-        <tr ng-repeat="record in filteredRecords | orderBy:sortBy track by record.id" repeat-complete="stopSpinner()">
+        <tr *ngFor="let record of filteredRecords; trackBy: trackId">
           <td class="text-right" *ngIf="dataTableConfig.enableRowNum">{{$index+1}}</td>
           <td *ngFor="let column of dataTableConfig.columns">
-            <div <c:if test="${!empty inputCell.id}">id="
-              <c:out value='${inputCell.id}' />Display"
-              </c:if>
-              <c:if test="${!empty inputCell.getStyleClassesString()}">class="
-                <c:out value='${inputCell.getStyleClassesString()}' />"
-              </c:if>
-              <c:if test="${!empty inputCell.customStyle}">style="
-                <c:out value='${inputCell.customStyle}' />"
-              </c:if>
-              <c:if test="${dataTable.enableDataEdit}">ng-if="!record.editing"</c:if>> {{record.
-              <c:out value="${column.dataCell.field.name}" /> }}
+            <div id="{{column.dataCell.inputField.id}}Display" class="{{column.dataCell.inputField.styleClasses}}" style="{{column.dataCell.inputField.customStyle}}" *ngIf="!record.editing">
+              {{record[column.dataCell.inputField.name]}}
             </div>
+            <!--
             <c:if test="${dataTable.enableDataEdit}">
               <div ng-if="record.editing">
                 <c:import url="textInput.jsp">
@@ -101,37 +90,37 @@
                 </c:import>
               </div>
             </c:if>
+            -->
           </td>
           <td class="text-nowrap" *ngIf="dataTableConfig.enableDataEdit">
-            <div ng-if="!(record.editing || filteredRecords.editing)">
-              <label class="small mright-5"><a href=""
-									ng-click="editRecord(record)"><span
-										class="glyphicon glyphicon-pencil mright-3"></span>Edit</a></label> <label class="small"><a href=""
-									ng-click="deleteRecord(record)"><span
-										class="glyphicon glyphicon-trash mright-3"></span>Delete</a></label>
+            <div *ngIf="!(record.editing || editing)">
+              <label class="small mright-5"><button class="btn btn-link"
+									(click)="editRecord(record)"><span
+										class="glyphicon glyphicon-pencil mright-3"></span>Edit</button></label>
+              <label class="small"><button class="btn btn-link"
+									(click)="deleteRecord(record)"><span
+										class="glyphicon glyphicon-trash mright-3"></span>Delete</button></label>
             </div>
-            <div ng-if="record.editing">
-              <label class="small mright-5" ng-if="!record.id"><a
-									href="" ng-click="createRecord(record, false)"><span
-										class="glyphicon glyphicon-save mright-3"></span>Create</a></label> <label class="small mright-5" ng-if="record.id"><a
-									href="" ng-click="updateRecord(record)"><span
-										class="glyphicon glyphicon-floppy-disk mright-3"></span>Save</a></label> <label class="small"><a href=""
-									ng-click="cancelRecord(record)"><span
-										class="glyphicon glyphicon-remove mright-3"></span>Cancel</a></label>
+            <div *ngIf="record.editing">
+              <label class="small mright-5" *ngIf="!record.id"><button class="btn btn-link" (click)="createRecord(record, false)"><span
+										class="glyphicon glyphicon-save mright-3"></span>Create</button></label>
+              <label class="small mright-5" *ngIf="record.id"><button class="btn btn-link" (click)="updateRecord(record)"><span
+										class="glyphicon glyphicon-floppy-disk mright-3"></span>Save</button></label>
+              <label class="small"><button class="btn btn-link" (click)="cancelRecord(record)"><span
+										class="glyphicon glyphicon-remove mright-3"></span>Cancel</button></label>
             </div>
           </td>
         </tr>
-        <tr ng-if="filteredRecords.length == 0 && searchText === '' && columnFilters.length <= 0">
+        <tr *ngIf="noRecordsFound()">
           <td colspan="<%=numberOfColumns%>">No records found!</td>
         </tr>
       </tbody>
--->
     </table>
     <div class="row mbottom-5" *ngIf="dataTableConfig.enableDataEdit">
       <div class="col-sm-12">
-        <button class="btn btn-sm btn-primary" ng-if="!filteredRecords.editing" ng-click="addRecord()">
-						<span class="glyphicon glyphicon-plus mright-3"></span>Add
-					</button>
+        <button class="btn btn-sm btn-primary" *ngIf="!editing" (click)="addRecord()">
+					<span class="glyphicon glyphicon-plus mright-3"></span>Add
+				</button>
       </div>
     </div>
   </div>

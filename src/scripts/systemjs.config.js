@@ -51,6 +51,14 @@
           }
         }
       },
+      pipes: {
+        defaultExtension: 'js',
+        meta: {
+          './*.js': {
+            loader: 'scripts:systemjs-angular-loader.js'
+          }
+        }
+      },
       rxjs: {
         defaultExtension: 'js'
       }

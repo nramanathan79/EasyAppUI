@@ -7,3 +7,5 @@ src/modules/*.js
 src/modules/*.js.map
 src/services/*.js
 src/services/*.js.map
+src/pipes/*.js
+src/pipes/*.js.map

@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { InputFieldConfig } from '../services/dataTable.service'
+import { InputFieldConfig } from '../services/dataTableConfig.service';
 
-class UniqueValue {
+export class UniqueValue {
   value: string;
   selected: boolean = false;
 }
 
-class ColumnFilter {
+export class ColumnFilter {
   name: string;
   type: string;
   filterPresent: boolean = false;
