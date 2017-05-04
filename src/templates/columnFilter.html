@@ -1,17 +1,17 @@
 <div class="pull-right" *ngIf="columnDataField">
   <div class="dropdown layout-inline">
-    <button id="{{columnDataField.name}}Filter" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-click="backupColumnFilter()"><span class="glyphicon glyphicon-filter" ng-class="getFilterClass()"></span></button>
-    <div class="dropdown-menu pad-5">
+    <button id="{{columnDataField.name}}Filter" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" (click)="backupColumnFilter()"><span class="glyphicon glyphicon-filter" [ngClass]="getFilterClass()"></span></button>
+    <div class="dropdown-menu pad-5" attr.aria-labelledby="{{columnDataField.name}}Filter">
       <form name="filterForm{{columnDataField.name}}" class="form form-inline">
-        <div class="row mbottom-5" ng-if="columnFilter.filterPresent" ng-cloak>
+        <div class="row mbottom-5" *ngIf="columnFilter.filterPresent">
           <div class="col-sm-12 text-right">
-            <button class="btn btn-link" ng-click="clearColumnFilter()">Clear Filter</button>
+            <button class="btn btn-link" (click)="clearColumnFilter()">Clear Filter</button>
           </div>
         </div>
-        <div class="panel panel-default pad-3 mbottom-5 div-scroll-200" ng-if="columnFilter.uniqueValues.length > 0">
+        <div class="panel panel-default pad-3 mbottom-5 div-scroll-200" *ngIf="columnFilter.uniqueValues.length > 0">
           <div class="row" *ngFor="let uniqueValue of columnFilter.uniqueValues; trackBy: trackValue">
             <div class="col-sm-12">
-              <label class="fw-normal"><input class="checkbox mright-5" type="checkbox" ng-model="uniqueValue.selected" ng-model-options="{updateOn: 'blur'}" value="false" />{{uniqueValue.value}}</label>
+              <label class="fw-normal"><input class="checkbox mright-5" type="checkbox" [(ngModel)]="uniqueValue.selected" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" value="false" />{{uniqueValue.value}}</label>
             </div>
           </div>
         </div>
@@ -19,13 +19,13 @@
           <div class="col-sm-6">
             <div class="checkbox">
               <label><input class="checkbox mright-5" type="checkbox"
-								ng-model="columnFilter.blank"
-								ng-model-options="{updateOn: 'blur'}" value="false" />Blank</label>
+								[(ngModel)]="columnFilter.blank"
+								[ngModelOptions]="{standalone: true, updateOn: 'blur'}" value="false" />Blank</label>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="checkbox">
-              <label><input class="checkbox mright-5" type="checkbox" ng-model="columnFilter.notBlank" ng-model-options="{updateOn: 'blur'}" value="false" />Not Blank</label>
+              <label><input class="checkbox mright-5" type="checkbox" [(ngModel)]="columnFilter.notBlank" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" value="false" />Not Blank</label>
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
             <div class="col-sm-12">
               <div class="input-group input-group-sm">
                 <label class="text-info small mbottom-0" for="{{columnDataField.name}}Contains">Contains</label>
-                <input id="{{columnDataField.name}}Contains" class="form-control" type="text" ng-model="columnFilter.contains" ng-model-options="{updateOn: 'blur'}" />
+                <input id="{{columnDataField.name}}Contains" class="form-control" type="text" [(ngModel)]="columnFilter.contains" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" />
               </div>
             </div>
           </div>
@@ -42,7 +42,7 @@
             <div class="col-sm-12">
               <div class="input-group input-group-sm">
                 <label class="text-info small mbottom-0" for="{{columnDataField.name}}DoesNotContain">Does Not Contain</label>
-                <input id="{{columnDataField.name}}DoesNotContain" class="form-control" type="text" ng-model="columnFilter.doesNotContain" ng-model-options="{updateOn: 'blur'}" />
+                <input id="{{columnDataField.name}}DoesNotContain" class="form-control" type="text" [(ngModel)]="columnFilter.doesNotContain" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" />
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@
             <div class="col-sm-12">
               <div class="input-group input-group-sm">
                 <label class="text-info small mbottom-0" for="{{columnDataField.name}}StartsWith">Starts With</label>
-                <input id="{{columnDataField.name}}StartsWith" class="form-control" type="text" ng-model="columnFilter.startsWith" ng-model-options="{updateOn: 'blur'}" />
+                <input id="{{columnDataField.name}}StartsWith" class="form-control" type="text" [(ngModel)]="columnFilter.startsWith" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" />
               </div>
             </div>
           </div>
@@ -58,14 +58,14 @@
             <div class="col-sm-12">
               <div class="input-group input-group-sm">
                 <label class="text-info small mbottom-0" for="{{columnDataField.name}}EndsWith">Ends With</label>
-                <input id="{{columnDataField.name}}EndsWith" class="form-control" type="text" ng-model="columnFilter.endsWith" ng-model-options="{updateOn: 'blur'}" />
+                <input id="{{columnDataField.name}}EndsWith" class="form-control" type="text" [(ngModel)]="columnFilter.endsWith" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" />
               </div>
             </div>
           </div>
           <div class="row mbottom-5">
             <div class="col-sm-12">
               <div class="checkbox">
-                <label><input class="checkbox mright-5" type="checkbox" ng-model="columnFilter.ignoreCase" ng-model-options="{updateOn: 'blur'}" value="false" />Ignore Case</label>
+                <label><input class="checkbox mright-5" type="checkbox" [(ngModel)]="columnFilter.ignoreCase" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" value="false" />Ignore Case</label>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
             <div class="col-sm-12">
               <div class="input-group input-group-sm">
                 <label class="text-info small mbottom-0" for="{{columnDataField.name}}FromNumber">From</label>
-                <input id="{{columnDataField.name}}FromNumber" class="form-control text-right" type="number" ng-model="columnFilter.fromNumber" ng-model-options="{updateOn: 'blur'}" max="{{columnFilter.toNumber}}" />
+                <input id="{{columnDataField.name}}FromNumber" class="form-control text-right" type="number" [(ngModel)]="columnFilter.fromNumber" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" max="{{columnFilter.toNumber}}" />
               </div>
             </div>
           </div>
@@ -83,19 +83,19 @@
             <div class="col-sm-12">
               <div class="input-group input-group-sm">
                 <label class="text-info small mbottom-0" for="{{columnDataField.name}}ToNumber">To</label>
-                <input id="{{columnDataField.name}}ToNumber" class="form-control text-right" type="number" ng-model="columnFilter.toNumber" ng-model-options="{updateOn: 'blur'}" min="{{columnFilter.fromNumber}}" />
+                <input id="{{columnDataField.name}}ToNumber" class="form-control text-right" type="number" [(ngModel)]="columnFilter.toNumber" [ngModelOptions]="{standalone: true, updateOn: 'blur'}" min="{{columnFilter.fromNumber}}" />
               </div>
             </div>
           </div>
         </div>
         <div class="row mtop-5">
           <div class="col-sm-6">
-            <button class="btn btn-sm btn-primary" type="submit" ng-click="applyColumnFilter()">
+            <button class="btn btn-sm btn-primary" type="submit" (click)="applyColumnFilter()">
 							<span class="glyphicon glyphicon-filter mright-5"></span>Apply
 						</button>
           </div>
           <div class="col-sm-6">
-            <button class="btn btn-sm btn-default pull-right" type="button" ng-click="restoreColumnFilter()">Cancel</button>
+            <button class="btn btn-sm btn-default pull-right" type="button" (click)="restoreColumnFilter()">Cancel</button>
           </div>
         </div>
       </form>

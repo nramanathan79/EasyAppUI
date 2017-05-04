@@ -142,6 +142,7 @@ export class DataTableConfigService {
                   maxLength: 3,
                   required: true
                 },
+                styleClasses: "pull-right",
                 customStyle: "width: 75px;"
               }
             },

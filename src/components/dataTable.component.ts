@@ -13,22 +13,25 @@ export class DataTableComponent implements OnInit {
   dataTableServiceName: string;
 
   dataTableConfig: DataTableConfig;
+  numberOfColumns: number = 1;
   searchText: string = "";
   sortSelection: string = "Single";
   sortBy: string[] = [];
+  columns: string[] = [];
   columnFilters: ColumnFilter[] = [];
   error: string = "";
   editing: boolean = false;
   recordBeforeEdit: any = {};
-
   records: any[] = [];
   filteredRecords: any[] = [];
+  csvFile: File;
 
   constructor(private dataTableConfigService: DataTableConfigService, private dataTableService: DataTableService) { }
 
   private getDataTable(): void {
     this.dataTableConfigService.getDataTableConfig(this.dataTableServiceName).then(dataTableConfig => {
       this.dataTableConfig = dataTableConfig;
+      this.numberOfColumns = (this.dataTableConfig.enableRowNum ? 1 : 0) + this.dataTableConfig.columns.length + (this.dataTableConfig.enableDataEdit ? 1 : 0);
       this.dataTableService.getDataTable(this.dataTableConfig.dataEndPoint).then(records => {
         this.records = records;
         this.filteredRecords = records;
@@ -119,7 +122,7 @@ export class DataTableComponent implements OnInit {
   }
 
   noRecordsFound(): boolean {
-    return this.filteredRecords.length == 0 && this.searchText === '' && this.columnFilters.length <= 0;
+    return this.filteredRecords && this.filteredRecords.length == 0 && this.searchText === '' && this.columnFilters.length <= 0;
   }
 
   cancelRecord(record: any): void {
@@ -137,5 +140,52 @@ export class DataTableComponent implements OnInit {
 
   trackId(index: number, record: any): string {
     return record.id;
+  }
+
+  hasFilters(): boolean {
+    return this.columnFilters && this.columnFilters.length > 0;
+  }
+
+  hasImportCsvFile(): boolean {
+    return this.csvFile && this.csvFile.name && this.csvFile.name.length > 0;
+  }
+
+  importCsvFile(): void {
+
+  }
+
+  performSearch(): void {
+    this.filterRecords();
+  }
+
+  filterRecords(): void {
+    this.filteredRecords = [];
+
+		this.records.forEach(record => {
+			var matchFound: boolean = true;
+
+			if (matchFound && this.searchText) {
+				var recordString: string = "";
+
+				for (var col = 0; col < this.columns.length; col++) {
+					var colName: string = this.columns[col];
+					recordString += record[colName];
+				}
+
+				if (recordString.search(new RegExp(this.searchText, 'i')) < 0) {
+					matchFound = false;
+				}
+			}
+
+			if (matchFound && this.columnFilters) {
+				for (var col: number = 0; matchFound && col < this.columnFilters.length; col++) {
+					matchFound = this.columnFilters[col].match(record);
+				}
+			}
+
+			if (matchFound) {
+				this.filteredRecords.push(record);
+			}
+		});
   }
 }

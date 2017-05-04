@@ -1,88 +1,87 @@
-<div>
-  <div class="container-fluid" *ngIf="dataTableConfig">
-    <div class="row" *ngIf="error">
-      <div class="alert alert-danger col-md-12">{{error}}</div>
-    </div>
-    <div class="row mtop-5">
-      <div class="col-md-4" *ngIf="dataTableConfig.enableSearch">
-        <form id="dataTableSearch" class="form form-inline" ng-submit="performSearch()">
-          <input class="form-control" type="text" placeholder="Search Table" ng-model="searchText" ng-model-options="{updateOn: 'submit'}" />
-          <button class="btn btn-sm btn-primary" type="submit">
+<div class="container-fluid" *ngIf="dataTableConfig">
+  <div class="row" *ngIf="error">
+    <div class="alert alert-danger col-md-12">{{error}}</div>
+  </div>
+  <div class="row mtop-5">
+    <div class="col-md-4" *ngIf="dataTableConfig.enableSearch">
+      <form id="dataTableSearch" class="form form-inline" (ngSubmit)="performSearch()">
+        <input class="form-control" type="text" placeholder="Search Table" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true, updateOn: 'submit'}" />
+        <button class="btn btn-sm btn-primary" type="submit">
 							<span class="glyphicon glyphicon-search mright-3"></span>Search
 						</button>
-          <button class="btn btn-sm btn-default" type="button" (click)="clearSearch()">Clear</button>
-        </form>
-      </div>
-      <div class="col-md-4" *ngIf="dataTableConfig.enableMultiColumnSort">
-        <div class="btn-group">
-          <button class="btn btn-sm" [ngClass]="sortSelection === 'Single' ? 'btn-primary' : 'btn-default'" (click)="toggleSortSelection()">Single
+        <button class="btn btn-sm btn-default" type="button" (click)="clearSearch()">Clear</button>
+      </form>
+    </div>
+    <div class="col-md-4" *ngIf="dataTableConfig.enableMultiColumnSort">
+      <div class="btn-group">
+        <button class="btn btn-sm" [ngClass]="sortSelection === 'Single' ? 'btn-primary' : 'btn-default'" (click)="toggleSortSelection()">Single
 							Column Sort</button>
-          <button class="btn btn-sm" [ngClass]="sortSelection === 'Single' ? 'btn-default' : 'btn-primary'" (click)="toggleSortSelection()">Multi
+        <button class="btn btn-sm" [ngClass]="sortSelection === 'Single' ? 'btn-default' : 'btn-primary'" (click)="toggleSortSelection()">Multi
 							Column Sort</button>
-        </div>
-        <button class="btn btn-sm btn-default" (click)="clearSort()" *ngIf="sortPresent()">Clear All Sort</button>
       </div>
-      <div class="col-md-1" *ngIf="dataTableConfig.enableColumnFilter">
-        <button class="btn btn-sm btn-default" (click)="clearFilters()" *ngIf="hasFilters()">Clear All Filters</button>
-      </div>
-      <div class="col-md-1" *ngIf="dataTableConfig.enableImportCsv">
-        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#importCsv">
+      <button class="btn btn-sm btn-default" (click)="clearSort()" *ngIf="sortPresent()">Clear All Sort</button>
+    </div>
+    <div class="col-md-1" *ngIf="dataTableConfig.enableColumnFilter">
+      <button class="btn btn-sm btn-default" (click)="clearFilters()" *ngIf="hasFilters()">Clear All Filters</button>
+    </div>
+    <div class="col-md-1" *ngIf="dataTableConfig.enableImportCsv">
+      <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#importCsv">
 						<span class="glyphicon glyphicon-import mright-3"></span>Import CSV</button>
-        <div id="importCsv" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Import CSV File</h4>
-              </div>
-              <div class="modal-body">
-                <input type="file" name="importCsv" id="importCsvFile" accept=".csv" import-csv />
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="pull-left btn btn-primary" (click)="importCsvFile()" [disabled]="!hasImportCsvFile()">Import
-									</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
+      <div id="importCsv" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Import CSV File</h4>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 text-right">
-        <div class="row" *ngIf="dataTableConfig.enableRefresh">
-          <div class="col-md-12">
-            <button class="btn btn-sm btn-primary" [disabled]="editing" (click)="listRecords()">
-								<span class="glyphicon glyphicon-refresh mright-3"></span>Refresh
-							</button>
+            <div class="modal-body">
+              <input type="file" name="importCsv" id="importCsvFile" accept=".csv" import-csv />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="pull-left btn btn-primary" (click)="importCsvFile()" [disabled]="!hasImportCsvFile()">Import
+									</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <table [ngClass]="dataTableConfig.styleClasses">
-      <thead>
-        <tr [ngClass]="dataTableConfig.headerRow?.styleClasses">
-          <th class="text-right" *ngIf="dataTableConfig.enableRowNum">#</th>
-          <th *ngFor="let column of dataTableConfig.columns">
-            <span *ngIf="dataTableConfig.enableColumnSort">
+    <div class="col-md-2 text-right">
+      <div class="row" *ngIf="dataTableConfig.enableRefresh">
+        <div class="col-md-12">
+          <button class="btn btn-sm btn-primary" [disabled]="editing" (click)="listRecords()">
+								<span class="glyphicon glyphicon-refresh mright-3"></span>Refresh
+							</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table [ngClass]="dataTableConfig.styleClasses">
+    <thead>
+      <tr [ngClass]="dataTableConfig.headerRow?.styleClasses">
+        <th class="text-right" *ngIf="dataTableConfig.enableRowNum">#</th>
+        <th *ngFor="let column of dataTableConfig.columns">
+          <span *ngIf="dataTableConfig.enableColumnSort">
               <button class="btn btn-link bold" (click)="addSort(column.dataCell.inputField.name)">{{column.dataCell.inputField.label}}</button>
               <span [ngClass]="{'required-field': column.dataCell.inputField.required}"></span>
-            <span class="glyphicon glyphicon-sort-by-attributes" *ngIf="sortBy.indexOf(column.dataCell.inputField.name) >= 0"></span>
-            <span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="sortBy.indexOf('-' + column.dataCell.inputField.name) >= 0"></span>
-            <sup *ngIf="showSortIndex(column.dataCell.inputField.name) > 0">{{showSortIndex(column.dataCell.inputField.name)}}</sup>
-            </span>
-            <span *ngIf="!dataTableConfig.enableColumnSort" [ngClass]="{'required-field': column.dataCell.inputField.required}">{{column.dataCell.inputField.label}}</span>
-            <column-filter *ngIf="dataTableConfig.enableColumnFilter" [columnDataField]="column.dataCell.inputField"></column-filter>
-          </th>
-          <th class="text-nowrap" *ngIf="dataTableConfig.enableDataEdit">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let record of filteredRecords; trackBy: trackId">
-          <td class="text-right" *ngIf="dataTableConfig.enableRowNum">{{$index+1}}</td>
-          <td *ngFor="let column of dataTableConfig.columns">
-            <div id="{{column.dataCell.inputField.id}}Display" class="{{column.dataCell.inputField.styleClasses}}" style="{{column.dataCell.inputField.customStyle}}" *ngIf="!record.editing">
-              {{record[column.dataCell.inputField.name]}}
-            </div>
-            <!--
+          <span class="glyphicon glyphicon-sort-by-attributes" *ngIf="sortBy.indexOf(column.dataCell.inputField.name) >= 0"></span>
+          <span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="sortBy.indexOf('-' + column.dataCell.inputField.name) >= 0"></span>
+          <sup *ngIf="showSortIndex(column.dataCell.inputField.name) > 0">{{showSortIndex(column.dataCell.inputField.name)}}</sup>
+          </span>
+          <span *ngIf="!dataTableConfig.enableColumnSort" [ngClass]="{'required-field': column.dataCell.inputField.required}">{{column.dataCell.inputField.label}}</span>
+          <column-filter *ngIf="dataTableConfig.enableColumnFilter" [columnDataField]="column.dataCell.inputField"></column-filter>
+        </th>
+        <th class="text-nowrap" *ngIf="dataTableConfig.enableDataEdit">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of filteredRecords; trackBy: trackId; let index = index">
+        <td class="text-right" *ngIf="dataTableConfig.enableRowNum">{{index+1}}</td>
+        <td *ngFor="let column of dataTableConfig.columns">
+          <div id="{{column.dataCell.inputField.id}}Display" class="{{column.dataCell.styleClasses}}" style="{{column.dataCell.customStyle}}" *ngIf="!record.editing">
+            {{record[column.dataCell.inputField.name]}}
+          </div>
+          <!--
             <c:if test="${dataTable.enableDataEdit}">
               <div ng-if="record.editing">
                 <c:import url="textInput.jsp">
@@ -91,37 +90,36 @@
               </div>
             </c:if>
             -->
-          </td>
-          <td class="text-nowrap" *ngIf="dataTableConfig.enableDataEdit">
-            <div *ngIf="!(record.editing || editing)">
-              <label class="small mright-5"><button class="btn btn-link"
+        </td>
+        <td class="text-nowrap" *ngIf="dataTableConfig.enableDataEdit">
+          <div *ngIf="!(record.editing || editing)">
+            <label class="small mright-5"><button class="btn btn-link"
 									(click)="editRecord(record)"><span
 										class="glyphicon glyphicon-pencil mright-3"></span>Edit</button></label>
-              <label class="small"><button class="btn btn-link"
+            <label class="small"><button class="btn btn-link"
 									(click)="deleteRecord(record)"><span
 										class="glyphicon glyphicon-trash mright-3"></span>Delete</button></label>
-            </div>
-            <div *ngIf="record.editing">
-              <label class="small mright-5" *ngIf="!record.id"><button class="btn btn-link" (click)="createRecord(record, false)"><span
+          </div>
+          <div *ngIf="record.editing">
+            <label class="small mright-5" *ngIf="!record.id"><button class="btn btn-link" (click)="createRecord(record, false)"><span
 										class="glyphicon glyphicon-save mright-3"></span>Create</button></label>
-              <label class="small mright-5" *ngIf="record.id"><button class="btn btn-link" (click)="updateRecord(record)"><span
+            <label class="small mright-5" *ngIf="record.id"><button class="btn btn-link" (click)="updateRecord(record)"><span
 										class="glyphicon glyphicon-floppy-disk mright-3"></span>Save</button></label>
-              <label class="small"><button class="btn btn-link" (click)="cancelRecord(record)"><span
+            <label class="small"><button class="btn btn-link" (click)="cancelRecord(record)"><span
 										class="glyphicon glyphicon-remove mright-3"></span>Cancel</button></label>
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="noRecordsFound()">
-          <td colspan="<%=numberOfColumns%>">No records found!</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="row mbottom-5" *ngIf="dataTableConfig.enableDataEdit">
-      <div class="col-sm-12">
-        <button class="btn btn-sm btn-primary" *ngIf="!editing" (click)="addRecord()">
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="noRecordsFound()">
+        <td [attr.colspan]="numberOfColumns">No records found!</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row mbottom-5" *ngIf="dataTableConfig.enableDataEdit">
+    <div class="col-sm-12">
+      <button class="btn btn-sm btn-primary" *ngIf="!editing" (click)="addRecord()">
 					<span class="glyphicon glyphicon-plus mright-3"></span>Add
 				</button>
-      </div>
     </div>
   </div>
 </div>

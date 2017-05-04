@@ -29,7 +29,7 @@
 
     "jquery": "^3.2.1",
     "bootstrap": "^3.3.7",
-    "papaparse": "^4.1.0"
+    "papaparse": "^4.1.28"
   },
   "devDependencies": {
     "concurrently": "^3.2.0",
