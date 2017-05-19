@@ -2,6 +2,7 @@
   "name": "EasyApp",
   "version": "1.0.0",
   "description": "Easy App",
+  "license": "MIT",
   "scripts": {
     "build": "tsc -p src/",
     "build:watch": "tsc -p src/ -w",
