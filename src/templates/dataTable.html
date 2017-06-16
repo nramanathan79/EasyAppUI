@@ -64,9 +64,9 @@
           <span *ngIf="dataTableConfig.enableColumnSort">
               <button class="btn btn-link bold" (click)="addSort(column.dataCell.inputField.name)">{{column.dataCell.inputField.label}}</button>
               <span [ngClass]="{'required-field': column.dataCell.inputField.required}"></span>
-          <span class="glyphicon glyphicon-sort-by-attributes" *ngIf="sortBy.indexOf(column.dataCell.inputField.name) >= 0"></span>
-          <span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="sortBy.indexOf('-' + column.dataCell.inputField.name) >= 0"></span>
-          <sup *ngIf="showSortIndex(column.dataCell.inputField.name) > 0">{{showSortIndex(column.dataCell.inputField.name)}}</sup>
+              <span class="glyphicon glyphicon-sort-by-attributes" *ngIf="sortBy.indexOf(column.dataCell.inputField.name) >= 0"></span>
+              <span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="sortBy.indexOf('-' + column.dataCell.inputField.name) >= 0"></span>
+              <sup *ngIf="showSortIndex(column.dataCell.inputField.name) > 0">{{showSortIndex(column.dataCell.inputField.name)}}</sup>
           </span>
           <span *ngIf="!dataTableConfig.enableColumnSort" [ngClass]="{'required-field': column.dataCell.inputField.required}">{{column.dataCell.inputField.label}}</span>
           <column-filter *ngIf="dataTableConfig.enableColumnFilter" [columnDataField]="column.dataCell.inputField"></column-filter>
